@@ -11,25 +11,16 @@
 #== Objectives ==================================================================
 
 # We will:
-# 1. Calculate sample size for longitudinal study
-# 2. Using prior study as reference
+# 1. Data Loading
+# 2. Calculate sample size for longitudinal study
+
+# Notes = Baseline samples and attrition will be calculated from prior feasibility study 
 
 
-# ======    1  Packages  =======================================================
-
-packages <- c("tidyverse","ggplot2")
-
-for (pkg in packages) {
-  if (!require(pkg, character.only = TRUE)) {
-    install.packages(pkg)
-    library(pkg, character.only = TRUE)
-  }
-}
-
-# =    2  Data loading  =========================================================
+# =    1  Data loading  =========================================================
 
 # Set working directory if needed
-setwd("C:/Users/ameth/Documents/GitHub/Study3.Longitudinal.MiGrowD")
+setwd("C:/Users/ameth/Documents/GitHub/Study3.LongitudinalStudy")
 
 #Import dataset to Global Environment: "migrowd_final.csv"
 data <- migrowd_final
@@ -41,8 +32,8 @@ round(prop.table(table(data$stool_collection_status, useNA = "always")) * 100, 1
 #Stool non-completion was the primary contributor to participant-level attrition, 
 #with 54.9% of enrolled participants (n = 139/253) failing to provide a usable stool sample. 
 
-# =    3  Sample size calculation ===============================================
-## 3.1. Per Time-Point Attrition and Longitudinal Adjustment
+# =    2  Sample size calculation ===============================================
+## 2.1. Per Time-Point Attrition and Longitudinal Adjustment
 # = MiGrowD-L will collect data at three annual time points (TP1:8–9 years; TP2:10–11 years; TP3:12–13 years). 
 # The overall attrition observed in MiGrowD (54.9%) was used to derive a per time-point attrition rate 
 # for the longitudinal design, applying the compound attrition formula: r.TP = 1 - (1 - Attrition)^(1/TP)
@@ -53,7 +44,7 @@ r.TP <- 1 - (1 - Attrition)^(1/TP)
 round(r.TP, digit = 4)
 percent.rTP <- round(r.TP, digit = 4)*100 #per time-point attrition (r.TP)ₚ ≈ 23.31% per year.
 
-## 3.2 Projected Participant Retention Across Three Annual Time Points
+## 2.2 Projected Participant Retention Across Three Annual Time Points
 # Baseline population = 500
 N0 = 500
 # Per time point attrition = 23.31%
@@ -66,7 +57,7 @@ TP3 <- TP2 - percent.rTP # TP3 = 53.38
 mean.retention <- (TP1 + TP2 + TP3)/3 # mean.retention = 76.69
 attrition.total <- mean.retention/100
 
-## 3.3 Longitudinal Attrition
+## 2.3 Longitudinal Attrition
 # = To maintain adequate statistical power in the context of longitudinal attrition, 
 # the base sample size (N0 = 500) was divided with mean.retention
 N.Total <- round(N0/attrition.total)
